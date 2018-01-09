@@ -1,10 +1,10 @@
 import React from 'react';
-import Message from './Message':
+import Message from './Message';
 
-const MessagesList = () => {
+const MessagesList = (props) => {
   return (
     <div>
-      { messages.map(message => (<Message key={messages.id} />)) }
+      { props.messages.map(message => (<Message key={message.id} message={message}/>)) }
     </div>
   )
 }

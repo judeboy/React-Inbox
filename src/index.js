@@ -59,5 +59,5 @@ const messages = [{
     "labels": []
   }];
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App messages={messages}/>, document.getElementById('root'));
 registerServiceWorker();
