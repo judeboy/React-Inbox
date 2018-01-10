@@ -1,10 +1,10 @@
 import React from 'react';
 import Message from './Message';
 
-const MessagesList = (props) => {
+const MessagesList = ({messages, toggleRead, toggleSelected, toggleStar}) => {
   return (
     <div>
-      { props.messages.map(message => (<Message key={message.id} message={message}/>)) }
+      { messages.map(message => (<Message key={message.id} message={message} toggleRead={toggleRead} toggleSelected={toggleSelected} toggleStar={toggleStar}/>)) }
     </div>
   )
 }

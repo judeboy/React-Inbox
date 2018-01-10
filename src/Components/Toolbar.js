@@ -1,6 +1,8 @@
 import React from 'react'
 
-const Toolbar = () => {
+
+
+const Toolbar = ({selectAll}) => {
   return(
     <div className="row toolbar">
     <div className="col-md-12">
@@ -9,8 +11,8 @@ const Toolbar = () => {
         unread messages
       </p>
 
-      <button className="btn btn-default">
-        <i className="fa fa-square-o"></i>
+      <button className="btn btn-default" onClick={()=>{selectAll()}}>
+        <i className="fa fa-square-o" ></i>
       </button>
 
       <button className="btn btn-default" disabled="disabled">
