@@ -141,6 +141,24 @@ class App extends Component {
     return selectClass
   }
 
+  divGimp = () => {
+    let disabled = ''
+    let count = 0;
+    let newMessages = this.state.messages.slice(0)
+    newMessages.map(message=>{
+      if(message.selected === true){
+        count++
+      }
+      if(count > 0){
+        disabled = ''
+      }
+      if(count === 0){
+      disabled = 'disabled'
+      }
+      })
+      return disabled
+  }
+
 
 
   render() {
@@ -148,7 +166,7 @@ class App extends Component {
       <div className="App">
         <Navbar />
         <div className='container'>
-          <Toolbar setButtonState={this.setButtonState} countUnread={this.countUnread} selectAll={this.selectAll} markAsRead={this.markAsRead} markAsUnread={this.markAsUnread} del={this.del} applyLabel={this.applyLabel} removeLabel={this.removeLabel}/>
+          <Toolbar setButtonState={this.setButtonState} countUnread={this.countUnread} selectAll={this.selectAll} markAsRead={this.markAsRead} markAsUnread={this.markAsUnread} del={this.del} applyLabel={this.applyLabel} removeLabel={this.removeLabel} divGimp={this.divGimp}/>
           <MessageList messages={this.state.messages} toggleRead={this.toggleRead} toggleSelected={this.toggleSelected} toggleStar={this.toggleStar} />
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-const Toolbar = ({selectAll, markAsRead, markAsUnread, del, applyLabel, removeLabel, countUnread, setButtonState}) => {
+const Toolbar = ({selectAll, markAsRead, markAsUnread, del, applyLabel, removeLabel, countUnread, setButtonState, divGimp}) => {
   return(
     <div className="row toolbar">
     <div className="col-md-12">
@@ -10,34 +10,34 @@ const Toolbar = ({selectAll, markAsRead, markAsUnread, del, applyLabel, removeLa
         unread messages
       </p>
 
-      <button className="btn btn-default" onClick={()=>{selectAll()}}>
+      <button className="btn btn-default"  onClick={()=>{selectAll()}}>
         <i className={`${setButtonState()}`} ></i>
       </button>
 
-      <button className="btn btn-default" onClick={()=>{markAsRead()}}>
+      <button className="btn btn-default" disabled={`${divGimp()}`} onClick={()=>{markAsRead()}}>
         Mark As Read
       </button>
 
-      <button className="btn btn-default" onClick={()=>{markAsUnread()}}>
+      <button className="btn btn-default" disabled={`${divGimp()}`} onClick={()=>{markAsUnread()}}>
         Mark As Unread
       </button>
 
-      <select className="form-control label-select" onChange={(e)=>{applyLabel(e.target.value)}} >
-        <option>Apply label</option>
+      <select disabled={`${divGimp()}`} className="form-control label-select" onChange={(e)=>{applyLabel(e.target.value)}} >
+        <option selected="true" disabled="disabled">Apply label</option>
         <option value="dev">dev</option>
         <option value="personal">personal</option>
         <option value="gschool">gschool</option>
       </select>
 
-      <select className="form-control label-select"
+      <select disabled={`${divGimp}`} className="form-control label-select"
         onChange={(e)=>{removeLabel(e.target.value)}}>
-        <option>Remove label</option>
+        <option selected="true" disabled="disabled">Remove label</option>
         <option value="dev">dev</option>
         <option value="personal">personal</option>
         <option value="gschool">gschool</option>
       </select>
 
-      <button className="btn btn-default" onClick={()=>{del()}}>
+      <button disabled={`${divGimp}`} className="btn btn-default" onClick={()=>{del()}}>
         <i className="fa fa-trash-o"></i>
       </button>
     </div>
