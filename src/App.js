@@ -14,7 +14,7 @@ class App extends Component {
     this.state = {
       messages: this.props.messages
     }
-  }
+  } //change
 
   toggleRead = (message) => {
     const index = this.state.messages.indexOf(message)
@@ -38,7 +38,6 @@ class App extends Component {
     newMessages[index].starred = !newMessages[index].starred
     this.setState({ messages: newMessages })
   }
-
 
   selectAll = () =>{
       let selectedMessages = this.state.messages.slice(0);
@@ -158,8 +157,6 @@ class App extends Component {
       })
       return disabled
   }
-
-
 
   render() {
     return (
