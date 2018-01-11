@@ -58,7 +58,7 @@ class App extends Component {
 
   markAsRead = (message) => {
     let newMessages = this.state.messages.slice(0)
-    newMessages.map(message=>{
+    newMessages.forEach(message=>{
       if(message.selected === true){
         message.read = true
       }
@@ -68,7 +68,7 @@ class App extends Component {
 
   markAsUnread = (message) => {
     let newMessages = this.state.messages.slice(0)
-    newMessages.map(message=>{
+    newMessages.forEach(message=>{
       if(message.selected === true){
         message.read = false
       }
@@ -79,7 +79,7 @@ class App extends Component {
   del = (message) => {
     let arr = [];
     let newMessages = this.state.messages.slice(0)
-    newMessages.map(message=>{
+    newMessages.forEach(message=>{
       if(!message.selected === true){
         arr.push(message)
       }
@@ -89,7 +89,7 @@ class App extends Component {
 
   applyLabel = (value) => {
     let newMessages = this.state.messages.slice(0)
-    newMessages.map(message => {
+    newMessages.forEach(message => {
         if(message.selected && message.labels.indexOf(value) === -1){
           message.labels.push(value);
         }
@@ -99,7 +99,7 @@ class App extends Component {
 
   removeLabel = (value) => {
     let newMessages = this.state.messages.slice(0)
-    newMessages.map(message => {
+    newMessages.forEach(message => {
       if(message.selected && message.labels.indexOf(value) !== -1){
         let index = message.labels.indexOf(value)
         message.labels.splice(index,1)
@@ -111,7 +111,7 @@ class App extends Component {
   countUnread = () => {
     let count = 0;
     let newMessages = this.state.messages.slice(0)
-    newMessages.map(message=>{
+    newMessages.forEach(message=>{
       if(message.read === false){
         count++
       }
@@ -123,7 +123,7 @@ class App extends Component {
     let count = 0;
     let selectClass = ''
     let newMessages = this.state.messages.slice(0)
-    newMessages.map(message=>{
+    newMessages.forEach(message=>{
       if(message.selected === true){
         count++
       }
@@ -144,7 +144,7 @@ class App extends Component {
     let disabled = ''
     let count = 0;
     let newMessages = this.state.messages.slice(0)
-    newMessages.map(message=>{
+    newMessages.forEach(message=>{
       if(message.selected === true){
         count++
       }
