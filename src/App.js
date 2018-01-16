@@ -4,26 +4,50 @@ import './App.css';
 import Navbar from './Components/Navbar';
 import Toolbar from './Components/Toolbar';
 import MessageList from './Components/MessageList';
+import Compose from './Components/Compose'
 // import Message from './Components/Message';
 
 let allSelected = true;
 
 class App extends Component {
+
   constructor(props){
     super(props)
     this.state = {
-      messages: this.props.messages
+      messages: []
     }
-  } //change
+  }
 
-  toggleRead = (message) => {
+async componentDidMount() {
+const response = await fetch('http://localhost:8082/api/messages')
+const json = await response.json()
+this.setState({
+  messages: json._embedded.messages
+})
+
+}
+
+  toggleRead = async (message) => {
+    const obj = {
+      "messageIds": [ message.id ],
+      "command": "read",
+      "read": !message.read
+    }
     const index = this.state.messages.indexOf(message)
     let newMessages = this.state.messages.slice(0)
     newMessages[index].read = !newMessages[index].read
     this.setState({ messages: newMessages })
+    await fetch('http://localhost:8082/api/messages',{
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(obj)
+    })
   }
 
-  toggleSelected = (message,e) => {
+  toggleSelected = async (message,e) => {
     e.stopPropagation()
     const index = this.state.messages.indexOf(message)
     let newMessages = this.state.messages.slice(0)
@@ -31,12 +55,25 @@ class App extends Component {
     this.setState({ messages: newMessages })
   }
 
-  toggleStar = (message,e) => {
+  toggleStar = async (message,e) => {
+    const obj = {
+      "messageIds": [ message.id ],
+      "command": "star",
+      "star": !message.starred
+    }
     e.stopPropagation()
     const index = this.state.messages.indexOf(message)
     let newMessages = this.state.messages.slice(0)
     newMessages[index].starred = !newMessages[index].starred
     this.setState({ messages: newMessages })
+    await fetch('http://localhost:8082/api/messages',{
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(obj)
+    })
   }
 
   selectAll = () =>{
@@ -56,61 +93,140 @@ class App extends Component {
       }
     }
 
-  markAsRead = (message) => {
+  markAsRead = async () => {
+    let id = [];
     let newMessages = this.state.messages.slice(0)
     newMessages.forEach(message=>{
       if(message.selected === true){
         message.read = true
+        id.push(message.id)
       }
     })
+    const obj = {
+      "messageIds": id,
+      "command": "read",
+      "read": true
+    }
     this.setState({messages:newMessages})
+    await fetch('http://localhost:8082/api/messages',{
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(obj)
+    })
   }
 
-  markAsUnread = (message) => {
+  markAsUnread = async () => {
+    let id = [];
     let newMessages = this.state.messages.slice(0)
     newMessages.forEach(message=>{
       if(message.selected === true){
         message.read = false
+        id.push(message.id)
       }
     })
+    const obj = {
+      "messageIds": id,
+      "command": "read",
+      "read": false
+    }
     this.setState({messages:newMessages})
+    await fetch('http://localhost:8082/api/messages',{
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(obj)
+    })
   }
 
-  del = (message) => {
+  del = async () => {
     let arr = [];
+    let ids = []
     let newMessages = this.state.messages.slice(0)
     newMessages.forEach(message=>{
       if(!message.selected === true){
         arr.push(message)
       }
-    })
-    this.setState({messages: arr})
-  }
-
-  applyLabel = (value) => {
-    let newMessages = this.state.messages.slice(0)
-    newMessages.forEach(message => {
-        if(message.selected && message.labels.indexOf(value) === -1){
-          message.labels.push(value);
-        }
-    })
-      this.setState({messages: newMessages})
-  }
-
-  removeLabel = (value) => {
-    let newMessages = this.state.messages.slice(0)
-    newMessages.forEach(message => {
-      if(message.selected && message.labels.indexOf(value) !== -1){
-        let index = message.labels.indexOf(value)
-        message.labels.splice(index,1)
+      if(message.selected === true){
+        ids.push(message.id)
       }
     })
+    const obj = {
+      "messageIds": ids,
+      "command": "delete"
+    }
+    this.setState({messages: arr})
+    await fetch('http://localhost:8082/api/messages',{
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(obj)
+    })
+  }
+
+  applyLabel = async (label) => {
+    let ids = [];
+    let newMessages = this.state.messages.slice(0)
+    newMessages.forEach(message => {
+        if(message.selected && message.labels.indexOf(label) === -1){
+          message.labels.push(label);
+          ids.push(message.id)
+        }
+    })
+    const obj = {
+      "messageIds": ids,
+      "command": "addLabel",
+      "label": label
+    }
+      this.setState({messages: newMessages})
+      await fetch('http://localhost:8082/api/messages',{
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(obj)
+      })
+  }
+
+  removeLabel = async (label) => {
+    let ids = [];
+    let newMessages = this.state.messages.slice(0)
+    newMessages.forEach(message => {
+      if(message.selected){
+        let index = message.labels.indexOf(label)
+        message.labels.splice(index, 1)
+        ids.push(message.id)
+      }
+    })
+    const obj = {
+      "messageIds": ids ,
+      "command": "removeLabel",
+      "label": label
+    }
     this.setState({messages: newMessages})
+    await fetch('http://localhost:8082/api/messages',{
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(obj)
+    })
   }
 
   countUnread = () => {
-    let count = 0;
+    if (!this.state.messages.length) {
+      return 0
+    }
     let newMessages = this.state.messages.slice(0)
+    let count = 0;
     newMessages.forEach(message=>{
       if(message.read === false){
         count++
@@ -120,6 +236,9 @@ class App extends Component {
   }
 
   setButtonState = () => {
+    if (!this.state.messages.length) {
+      return 0
+    }
     let count = 0;
     let selectClass = ''
     let newMessages = this.state.messages.slice(0)
@@ -141,6 +260,9 @@ class App extends Component {
   }
 
   divGimp = () => {
+    if (!this.state.messages.length) {
+      return 0
+    }
     let disabled = ''
     let count = 0;
     let newMessages = this.state.messages.slice(0)
@@ -162,6 +284,7 @@ class App extends Component {
     return (
       <div className="App">
         <Navbar />
+        <Compose />
         <div className='container'>
           <Toolbar setButtonState={this.setButtonState} countUnread={this.countUnread} selectAll={this.selectAll} markAsRead={this.markAsRead} markAsUnread={this.markAsUnread} del={this.del} applyLabel={this.applyLabel} removeLabel={this.removeLabel} divGimp={this.divGimp}/>
           <MessageList messages={this.state.messages} toggleRead={this.toggleRead} toggleSelected={this.toggleSelected} toggleStar={this.toggleStar} />

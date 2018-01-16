@@ -10,6 +10,10 @@ const Toolbar = ({selectAll, markAsRead, markAsUnread, del, applyLabel, removeLa
         unread messages
       </p>
 
+      <button className="btn btn-danger">
+      <i className="fa fa-plus"></i>
+      </button>
+
       <button className="btn btn-default"  onClick={()=>{selectAll()}}>
         <i className={`${setButtonState()}`} ></i>
       </button>
@@ -29,7 +33,7 @@ const Toolbar = ({selectAll, markAsRead, markAsUnread, del, applyLabel, removeLa
         <option value="gschool">gschool</option>
       </select>
 
-      <select disabled={`${divGimp}`} className="form-control label-select"
+      <select disabled={`${divGimp()}`} className="form-control label-select"
         onChange={(e)=>{removeLabel(e.target.value)}}>
         <option selected="true" disabled="disabled">Remove label</option>
         <option value="dev">dev</option>
@@ -37,7 +41,7 @@ const Toolbar = ({selectAll, markAsRead, markAsUnread, del, applyLabel, removeLa
         <option value="gschool">gschool</option>
       </select>
 
-      <button disabled={`${divGimp}`} className="btn btn-default" onClick={()=>{del()}}>
+      <button disabled={`${divGimp()}`} className="btn btn-default" onClick={()=>{del()}}>
         <i className="fa fa-trash-o"></i>
       </button>
     </div>
