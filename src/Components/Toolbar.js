@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-const Toolbar = ({selectAll, markAsRead, markAsUnread, del, applyLabel, removeLabel, countUnread, setButtonState, divGimp}) => {
+const Toolbar = ({selectAll, markAsRead, markAsUnread, del, applyLabel, removeLabel, countUnread, setButtonState, divGimp, toggleForm}) => {
   return(
     <div className="row toolbar">
     <div className="col-md-12">
@@ -10,7 +10,7 @@ const Toolbar = ({selectAll, markAsRead, markAsUnread, del, applyLabel, removeLa
         unread messages
       </p>
 
-      <button className="btn btn-danger">
+      <button className="btn btn-danger" onClick={()=>{toggleForm()}}>
       <i className="fa fa-plus"></i>
       </button>
 

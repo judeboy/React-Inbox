@@ -1,8 +1,15 @@
 import React from 'react';
 
-const Compose = ({}) => {
+
+const Compose = ({visibility, handler}) => {
+  let visible=''
+  if(visibility==='hidden'){
+    visible = 'none'
+  }else {
+    visible = 'block'
+  }
   return(
-    <form className="form-horizontal well">
+    <form style={{display:visible}} className="form-horizontal well">
     <div className="form-group">
       <div className="col-sm-8 col-sm-offset-2">
         <h4>Compose Message</h4>
@@ -22,7 +29,7 @@ const Compose = ({}) => {
     </div>
     <div className="form-group">
       <div className="col-sm-8 col-sm-offset-2">
-        <input type="submit" value="Send" className="btn btn-primary"></input>
+        <input type="button" onClick={handler} value="Send" className="btn btn-primary"></input>
       </div>
     </div>
   </form>

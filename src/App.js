@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
 import Navbar from './Components/Navbar';
 import Toolbar from './Components/Toolbar';
 import MessageList from './Components/MessageList';
 import Compose from './Components/Compose'
-// import Message from './Components/Message';
 
 let allSelected = true;
 
@@ -14,18 +12,41 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      messages: []
+      messages: [],
+      newForm: 'hidden',
     }
   }
 
-async componentDidMount() {
-const response = await fetch('http://localhost:8082/api/messages')
-const json = await response.json()
-this.setState({
-  messages: json._embedded.messages
-})
+  async componentDidMount() {
+    const response = await fetch('http://localhost:8082/api/messages')
+    const json = await response.json()
+    this.setState({
+      messages: json._embedded.messages
+    })
+  }
 
-}
+  newMessage = async () => {
+    const sub = document.getElementById('subject').value
+    const bod = document.getElementById('body').value
+    let obj = {
+      "subject": sub,
+      "body": bod
+    }
+    let response = await fetch('http://localhost:8082/api/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(obj)
+    })
+    let messageBody = await response.json()
+    let newMessages = [...this.state.messages, messageBody]
+    this.setState({
+      messages: newMessages,
+      newForm: 'hidden'
+    })
+  }
 
   toggleRead = async (message) => {
     const obj = {
@@ -280,13 +301,33 @@ this.setState({
       return disabled
   }
 
+  toggleForm = () => {
+    if(this.state.newForm === 'hidden'){
+      this.setState({
+        newForm:'notHidden'
+      })
+    }
+    else{
+      this.setState({
+        newForm:'hidden'
+      })
+    }
+  }
+
+  handler = () => {
+    this.newMessage();
+    this.toggleForm();
+  }
+
   render() {
     return (
       <div className="App">
+
         <Navbar />
-        <Compose />
+
         <div className='container'>
-          <Toolbar setButtonState={this.setButtonState} countUnread={this.countUnread} selectAll={this.selectAll} markAsRead={this.markAsRead} markAsUnread={this.markAsUnread} del={this.del} applyLabel={this.applyLabel} removeLabel={this.removeLabel} divGimp={this.divGimp}/>
+          <Toolbar setButtonState={this.setButtonState} countUnread={this.countUnread} selectAll={this.selectAll} markAsRead={this.markAsRead} markAsUnread={this.markAsUnread} del={this.del} applyLabel={this.applyLabel} removeLabel={this.removeLabel} divGimp={this.divGimp} toggleForm= {this.toggleForm}/>
+          <Compose visibility={this.state.newForm} handler= {this.handler} newMessage={this.newMessage}/>
           <MessageList messages={this.state.messages} toggleRead={this.toggleRead} toggleSelected={this.toggleSelected} toggleStar={this.toggleStar} />
         </div>
       </div>
