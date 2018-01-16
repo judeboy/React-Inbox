@@ -28,10 +28,12 @@ class App extends Component {
   newMessage = async () => {
     const sub = document.getElementById('subject').value
     const bod = document.getElementById('body').value
+    
     let obj = {
       "subject": sub,
       "body": bod
     }
+
     let response = await fetch('http://localhost:8082/api/messages', {
       method: 'POST',
       headers: {
