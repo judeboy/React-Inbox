@@ -4,6 +4,10 @@ import Navbar from './Components/Navbar';
 import Toolbar from './Components/Toolbar';
 import MessageList from './Components/MessageList';
 import Compose from './Components/Compose'
+import {
+  BrowserRouter as Router,
+  Route,
+} from 'react-router-dom'
 
 let allSelected = true;
 
@@ -13,7 +17,7 @@ class App extends Component {
     super(props)
     this.state = {
       messages: [],
-      newForm: 'hidden',
+      newForm: '',
     }
   }
 
@@ -28,7 +32,7 @@ class App extends Component {
   newMessage = async () => {
     const sub = document.getElementById('subject').value
     const bod = document.getElementById('body').value
-    
+
     let obj = {
       "subject": sub,
       "body": bod
@@ -102,13 +106,13 @@ class App extends Component {
   selectAll = () =>{
       let selectedMessages = this.state.messages.slice(0);
       if(allSelected === true){
-        selectedMessages.map(mess => {
+        selectedMessages.forEach(mess => {
           mess.selected = true
           this.setState({messages:selectedMessages})
         })
         allSelected = false
       } else {
-        selectedMessages.map(mess => {
+        selectedMessages.forEach(mess => {
           mess.selected = false
           this.setState({messages:selectedMessages})
         })
@@ -323,17 +327,23 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <Router className="App">
+        <div>
 
-        <Navbar />
+          <Navbar />
 
-        <div className='container'>
-          <Toolbar setButtonState={this.setButtonState} countUnread={this.countUnread} selectAll={this.selectAll} markAsRead={this.markAsRead} markAsUnread={this.markAsUnread} del={this.del} applyLabel={this.applyLabel} removeLabel={this.removeLabel} divGimp={this.divGimp} toggleForm= {this.toggleForm}/>
-          <Compose visibility={this.state.newForm} handler= {this.handler} newMessage={this.newMessage}/>
-          <MessageList messages={this.state.messages} toggleRead={this.toggleRead} toggleSelected={this.toggleSelected} toggleStar={this.toggleStar} />
+           <Toolbar setButtonState={this.setButtonState} countUnread={this.countUnread} selectAll={this.selectAll} markAsRead={this.markAsRead} markAsUnread={this.markAsUnread} del={this.del} applyLabel={this.applyLabel} removeLabel={this.removeLabel} divGimp={this.divGimp} toggleForm= {this.toggleForm}/>
+           <Route exact path="/compose" render={() => (
+             <div className='container'>
+               <Compose visibility={this.state.newForm} handler= {this.handler} newMessage={this.newMessage} />
+             </div>
+           )}/>
+
+           <MessageList messages={this.state.messages} toggleRead={this.toggleRead} toggleSelected={this.toggleSelected} toggleStar={this.toggleStar} />
+
         </div>
-      </div>
-    );
+      </Router>
+    )
   }
 }
 

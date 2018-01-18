@@ -2,12 +2,14 @@ import React from 'react';
 //change
 
 const Compose = ({visibility, handler}) => {
+
   let visible=''
   if(visibility==='hidden'){
     visible = 'none'
-  }else {
+  } else {
     visible = 'block'
   }
+
   return(
     <form style={{display:visible}} className="form-horizontal well">
     <div className="form-group">

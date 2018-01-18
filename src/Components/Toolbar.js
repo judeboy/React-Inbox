@@ -1,5 +1,11 @@
 import React from 'react'
 
+import {
+  Route,
+  Link,
+  Switch
+} from 'react-router-dom'
+
 
 const Toolbar = ({selectAll, markAsRead, markAsUnread, del, applyLabel, removeLabel, countUnread, setButtonState, divGimp, toggleForm}) => {
   return(
@@ -10,9 +16,18 @@ const Toolbar = ({selectAll, markAsRead, markAsUnread, del, applyLabel, removeLa
         unread messages
       </p>
 
-      <button className="btn btn-danger" onClick={()=>{toggleForm()}}>
-      <i className="fa fa-plus"></i>
-      </button>
+      <Switch>
+        <Route path='/compose' render={()=>(
+          <Link to='/' className="btn btn-danger" >
+          <i className="fa fa-plus"></i>
+          </Link>
+        )} />
+        <Route render={()=>(
+          <Link to='/compose' className="btn btn-danger" >
+          <i className="fa fa-plus"></i>
+          </Link>
+        )} />
+      </Switch>
 
       <button className="btn btn-default"  onClick={()=>{selectAll()}}>
         <i className={`${setButtonState()}`} ></i>

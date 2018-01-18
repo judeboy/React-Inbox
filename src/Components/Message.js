@@ -1,4 +1,8 @@
 import React from 'react';
+import {
+  Route,
+  Link
+} from 'react-router-dom'
 
 const Message = ({message, toggleRead, toggleSelected, toggleStar}) => {
 
@@ -25,9 +29,14 @@ const Message = ({message, toggleRead, toggleSelected, toggleStar}) => {
       </div>
       <div className={`col-xs-11`}>
           {message.labels.map(ele => <span className="label label-warning">{ele}</span>)}
-        <a href="#" >
+        <Link to={`/messages/${message.id}`}>
           {message.subject}
-        </a>
+        </Link>
+        <Route path={`/messages/${message.id}`} render ={() => (
+          <div>
+            JUDAH JUDAH JUDAH
+          </div>
+        )}/>
       </div>
     </div>
   )
