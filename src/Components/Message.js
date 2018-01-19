@@ -1,4 +1,6 @@
 import React from 'react';
+import Body from './Body';
+
 import {
   Route,
   Link
@@ -27,14 +29,16 @@ const Message = ({message, toggleRead, toggleSelected, toggleStar}) => {
           </div>
         </div>
       </div>
-      <div className={`col-xs-11`}>
+      <div className={`col-xs-11`} onCLick={(e)=>{
+
+      }}>
           {message.labels.map(ele => <span className="label label-warning">{ele}</span>)}
         <Link to={`/messages/${message.id}`}>
           {message.subject}
         </Link>
         <Route path={`/messages/${message.id}`} render ={() => (
           <div>
-            JUDAH JUDAH JUDAH
+            <Body message={message}/>
           </div>
         )}/>
       </div>
